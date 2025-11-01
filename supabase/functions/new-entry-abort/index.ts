@@ -1,8 +1,6 @@
 import 'npm:tslib@2';
-import { addDetails } from './add.ts';
-import { getDetails } from './get.ts';
+import { addAbort } from './add.ts';
 import { getCorsHeaders } from './cors.ts';
-console.info('server started');
 Deno.serve(async (req)=>{
   try {
     if (req.method === 'OPTIONS') {
@@ -10,8 +8,7 @@ Deno.serve(async (req)=>{
         headers: getCorsHeaders(req)
       });
     }
-    if (req.method === 'POST') return await addDetails(req);
-    else if (req.method === 'GET') return await getDetails(req);
+    if (req.method === 'POST') return await addAbort(req);
     else {
       return new Response(JSON.stringify({
         error: 'Method not allowed'
