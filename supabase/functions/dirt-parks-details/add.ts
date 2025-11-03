@@ -17,7 +17,7 @@ export async function addDetails(req) {
   }
   const payload = await req.json();
   console.log(payload);
-  if (!payload.trail_id || !payload.rules ) { /*|| !payload.status || !payload.status_hint || !payload.opening_hours*/
+  if (!payload.id || !payload.rules ) { /*|| !payload.status || !payload.status_hint || !payload.opening_hours*/
     return new Response(JSON.stringify({
       error: 'Missing payload values, either trail_id,rules, status, status_hint, opening_hours'
     }), {
@@ -48,10 +48,10 @@ export async function addDetails(req) {
       }
     }
   });
-  const { data, error } = await supabase.from('trail_details').upsert({
+  const { data, error } = await supabase.from('dirt_park_details').upsert({
     ...payload,
     last_update: new Date().toISOString(),
-  }, { onConflict: 'trail_id' });
+  }, { onConflict: 'id' });
   if (error) {
     throw error;
   }
