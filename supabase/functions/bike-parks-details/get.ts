@@ -40,13 +40,12 @@ export async function getDetails(req) {
 
     const { data, error } = await supabase.from('bike_park_details').select('*').eq('id', id);
 
-    // console.log(data);
-    // await supabase.from('trail_clicks').insert({
-    //   trail_id: id
-    // });
-    // if (error) {
-    //   throw error;
-    // }
+    await supabase.from('bikepark_clicks').insert({
+      bikepark_id: id
+    });
+    if (error) {
+      throw error;
+    }
 
     return new Response(JSON.stringify({
       data
