@@ -38,7 +38,18 @@ export async function getDetails(req) {
       }
     });
 
-    const { data, error } = await supabase.from('trail_details').select('*').eq('trail_id', trail);
+    const { data, error } = await supabase
+      .from('trail_details')
+      .select(`
+        *,
+        trails (
+          name,
+          creator,
+          instagram
+        )
+      `)
+      .eq('trail_id', trail)
+      .single();
 
     console.log(data);
     await supabase.from('trail_clicks').insert({

@@ -35,6 +35,10 @@ Deno.serve(async (req)=>{
     const mobile = mobile_strin === '?1';
     const platform = req.headers.get('sec-ch-ua-platform'); // e.g. "Android", "iOS", "Windows"
     const agent = req.headers.get('sec-ch-ua') ?? req.headers.get('user-agent');
+    const referrer = req.headers.get('referrer') || '';
+    console.log('Referrer: ', referrer);
+    console.log('Platform: ', platform);
+    console.log('User-Agent: ', agent);
     /*if (!agent) {
       return new Response(JSON.stringify({
         error: 'Missing or empty "user-agent" header'
@@ -68,7 +72,8 @@ Deno.serve(async (req)=>{
     const { data, error } = await supabase.from('visits').insert({
       user_agent: agent,
       mobile: mobile,
-      platform: platform
+      platform: platform,
+      referrer: referrer
     });
     if (error) {
       throw error;
