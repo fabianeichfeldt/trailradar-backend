@@ -45,7 +45,9 @@ export async function getDetails(req) {
         trails (
           name,
           creator,
-          instagram
+          instagram,
+          latitude,
+          longitude
         )
       `)
       .eq('trail_id', trail)
