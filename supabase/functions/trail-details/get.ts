@@ -38,7 +38,7 @@ export async function getDetails(req) {
       }
     });
 
-    const { data, error } = await supabase
+    const details = supabase
       .from('trail_details')
       .select(`
         *,
@@ -53,10 +53,26 @@ export async function getDetails(req) {
       .eq('trail_id', trail)
       .single();
 
-    console.log(data);
-    await supabase.from('trail_clicks').insert({
+    const photos = supabase
+      .from("trail_photos")
+      .select("*")
+      .eq("trail_id", trail)
+      .order("id", { ascending: true });
+
+      const videos = supabase
+      .from("trail_videos")
+      .select("*")
+      .eq("trail_id", trail);
+    
+      const insertClick = supabase.from('trail_clicks').insert({
       trail_id: trail
     });
+
+    const [{ data, error }, { data: photosData }, { data: videosData }] = 
+      await Promise.all([details, photos, videos, insertClick]);
+    data.photos = photosData;
+    data.videos = videosData;
+    
     if (error) {
       throw error;
     }

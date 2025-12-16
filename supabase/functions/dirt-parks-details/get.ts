@@ -38,7 +38,11 @@ export async function getDetails(req) {
       }
     });
 
-    const { data, error } = await supabase.from('dirt_park_details').select('*').eq('id', id);
+    const { data, error } = await supabase
+    .from('dirt_park_details')
+    .select('*')
+    .eq('id', id)
+    .single();
 
     await supabase.from('dirtpark_clicks').insert({
       dirtpark_id: id
@@ -46,7 +50,8 @@ export async function getDetails(req) {
     if (error) {
       throw error;
     }
-
+    data.photos = [];
+    data.videos = [];
     return new Response(JSON.stringify({
       data
     }), {
