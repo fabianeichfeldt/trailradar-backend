@@ -17,7 +17,7 @@ export async function addDetails(req) {
   }
   const payload = await req.json();
   console.log(payload);
-  if (!payload.trail_id || !payload.rules ) { /*|| !payload.status || !payload.status_hint || !payload.opening_hours*/
+  if (!payload.trail_id || !payload.trail_description ) { /*|| !payload.status || !payload.status_hint || !payload.opening_hours*/
     return new Response(JSON.stringify({
       error: 'Missing payload values, either trail_id,rules, status, status_hint, opening_hours'
     }), {
