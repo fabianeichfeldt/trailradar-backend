@@ -34,7 +34,7 @@ export async function getTrails(req) {
       }
     }
   });
-  const { data, error } = await supabase.from('trails').select('*').order('created_at', {
+  const { data, error } = await supabase.from('trails').select('*').eq('visible', true).order('created_at', {
     ascending: true
   });
   if (error) {
