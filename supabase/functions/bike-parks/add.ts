@@ -18,7 +18,7 @@ export async function addPark(req) {
   const payload = await req.json();
   payload.instagram = (payload.instagram || '').replace(/^@/, '');
   console.log(payload);
-  if (!payload.name || !payload.url || !payload.longitude || !payload.latitude) {
+  if (!payload.name || !payload.longitude || !payload.latitude) {
     return new Response(JSON.stringify({
       error: 'Missing payload values, either name,url, longitude, latitude'
     }), {
