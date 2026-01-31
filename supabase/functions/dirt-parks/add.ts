@@ -18,7 +18,7 @@ export async function addDirtPark(req) {
   }
   const payload = await req.json();
   console.log(payload);
-  if (!payload.name || !payload.url || !payload.longitude || !payload.latitude) {
+  if (!payload.name || !payload.longitude || !payload.latitude) {
     return new Response(JSON.stringify({
       error: 'Missing payload values, either name,url, longitude, latitude'
     }), {

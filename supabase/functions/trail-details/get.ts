@@ -55,7 +55,7 @@ export async function getDetails(req) {
 
     const photos = supabase
       .from("trail_photos")
-      .select("*")
+      .select("*, profiles(display_name, avatar_url)")
       .eq("trail_id", trail)
       .order("id", { ascending: true });
 
