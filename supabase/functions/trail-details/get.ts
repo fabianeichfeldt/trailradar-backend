@@ -63,15 +63,21 @@ export async function getDetails(req) {
       .from("trail_videos")
       .select("*")
       .eq("trail_id", trail);
+
+      const favorites = supabase
+      .from("trail_favorites")
+      .select("*")
+      .eq("trail_id", trail);
     
       const insertClick = supabase.from('trail_clicks').insert({
       trail_id: trail
     });
 
-    const [{ data, error }, { data: photosData }, { data: videosData }] = 
-      await Promise.all([details, photos, videos, insertClick]);
+    const [{ data, error }, { data: photosData }, { data: videosData }, { data: favoritesData }] = 
+      await Promise.all([details, photos, videos, favorites, insertClick]);
     data.photos = photosData;
     data.videos = videosData;
+    data.likes = favoritesData;
     
     if (error) {
       throw error;
