@@ -36,6 +36,7 @@ Deno.serve(async (req)=>{
     const platform = req.headers.get('sec-ch-ua-platform'); // e.g. "Android", "iOS", "Windows"
     const agent = req.headers.get('sec-ch-ua') ?? req.headers.get('user-agent');
     const referrer = req.headers.get('referrer') || '';
+    const path = req.headers.get('path') || '/';
     console.log('Referrer: ', referrer);
     console.log('Platform: ', platform);
     console.log('User-Agent: ', agent);
@@ -73,7 +74,8 @@ Deno.serve(async (req)=>{
       user_agent: agent,
       mobile: mobile,
       platform: platform,
-      referrer: referrer
+      referrer: referrer,
+      path: path
     });
     if (error) {
       throw error;
