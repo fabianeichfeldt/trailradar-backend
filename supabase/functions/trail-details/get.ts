@@ -46,12 +46,13 @@ export async function getDetails(req) {
           name,
           creator,
           instagram,
+          spotcheck,
           latitude,
           longitude
         )
       `)
       .eq('trail_id', trail)
-      .single();
+      .maybeSingle();
 
     const photos = supabase
       .from("trail_photos")
@@ -73,15 +74,15 @@ export async function getDetails(req) {
       trail_id: trail
     });
 
-    const [{ data, error }, { data: photosData }, { data: videosData }, { data: favoritesData }] = 
+    let [{ data, error }, { data: photosData }, { data: videosData }, { data: favoritesData }] = 
       await Promise.all([details, photos, videos, favorites, insertClick]);
+    data = data? data : {};
     data.photos = photosData;
     data.videos = videosData;
     data.likes = favoritesData;
     
-    if (error) {
+    if (error)
       throw error;
-    }
 
     return new Response(JSON.stringify({
       data
