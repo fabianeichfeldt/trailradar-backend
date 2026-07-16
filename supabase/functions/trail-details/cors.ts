@@ -1,6 +1,7 @@
 const allowedOrigins = [
   'https://trailradar.org',
-  'http://localhost'
+  'http://localhost',
+  'http://localhost:3000',
 ];
 export function getCorsHeaders(req) {
   const origin = req.headers.get('origin') || '';

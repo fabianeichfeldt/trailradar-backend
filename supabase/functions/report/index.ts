@@ -1,5 +1,6 @@
 import { createClient } from 'npm:@supabase/supabase-js@2';
 import { getCorsHeaders } from './cors.ts';
+
 Deno.serve(async (req)=>{
   try {
     if (req.method === 'OPTIONS') {
@@ -30,20 +31,10 @@ Deno.serve(async (req)=>{
         }
       });
     }
-    const mobile_strin = req.headers.get('sec-ch-ua-mobile');
-    console.log('Is mobile: ', mobile_strin);
-    const mobile = mobile_strin === '?1';
-    const platform = req.headers.get('sec-ch-ua-platform'); // e.g. "Android", "iOS", "Windows"
-    const agent = req.headers.get('sec-ch-ua') ?? req.headers.get('user-agent');
-    const referrer = req.headers.get('referrer') || '';
-    const path = req.headers.get('path') || '/';
-    const pwa = req.headers.get('pwa') === 'true';
-    console.log('Referrer: ', referrer);
-    console.log('Platform: ', platform);
-    console.log('User-Agent: ', agent);
-    /*if (!agent) {
+    const payload = await req.json();
+    if (!payload.trail_id || !payload.message) {
       return new Response(JSON.stringify({
-        error: 'Missing or empty "user-agent" header'
+        error: 'Missing payload values, either trail_id or message'
       }), {
         status: 400,
         headers: {
@@ -51,7 +42,8 @@ Deno.serve(async (req)=>{
           'Content-Type': 'application/json'
         }
       });
-    }*/ const supabaseUrl = Deno.env.get('SUPABASE_URL');
+    }
+    const supabaseUrl = Deno.env.get('SUPABASE_URL');
     const serviceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
     if (!supabaseUrl || !serviceKey) {
       return new Response(JSON.stringify({
@@ -64,20 +56,11 @@ Deno.serve(async (req)=>{
         }
       });
     }
-    const supabase = createClient(Deno.env.get('SUPABASE_URL') ?? '', Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '', {
-      global: {
-        headers: {
-          Authorization: req.headers.get('Authorization')
-        }
-      }
-    });
-    const { data, error } = await supabase.from('visits').insert({
-      user_agent: agent,
-      mobile: mobile,
-      platform: platform,
-      referrer: referrer,
-      path: path,
-      pwa: pwa
+    const supabase = createClient(supabaseUrl, serviceKey, {  });
+    const { data, error } = await supabase.from('reports').insert({
+      trail_id: payload.trail_id,
+      message: payload.message,
+      user_id: payload.user_id ?? null
     });
     if (error) {
       throw error;
@@ -89,7 +72,7 @@ Deno.serve(async (req)=>{
         ...getCorsHeaders(req),
         'Content-Type': 'application/json'
       },
-      status: 200
+      status: 201
     });
   } catch (err) {
     return new Response(JSON.stringify({

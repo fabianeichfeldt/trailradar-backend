@@ -17,6 +17,9 @@
   },
   "homepage": "https://github.com/fabianeichfeldt/trailradar-backend#readme",
   "devDependencies": {
-    "supabase": "^2.53.6"
+    "supabase": "^2.62.5"
+  },
+  "dependencies": {
+    "create-cloudflare": "^2.56.0"
   }
 }
